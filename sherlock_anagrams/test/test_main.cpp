@@ -42,12 +42,12 @@ TEST(Anagram, aac1)
     ASSERT_EQ(sherlockAndAnagrams("aac"), 1);
 }
 
-TEST(Anagram, aaa3)
+TEST(Anagram, aaa4)
 {
     ASSERT_EQ(sherlockAndAnagrams("aaa"), 4);
 }
 
-TEST(Anagram, aba3)
+TEST(Anagram, aba2)
 {
     ASSERT_EQ(sherlockAndAnagrams("aba"), 2);
 }
