@@ -19,46 +19,32 @@ std::ostream& operator<<(std::ostream& os, const MatchIndices& indices)
 int sherlockAndAnagrams(std::string str)
 {
     int num_anagrams = 0;
-    std::queue<MatchIndices> matches;
-    std::unordered_set<MatchIndices> all_indices;
-
     int length = str.length();
-    for(int first_index = 0; first_index < length-1; ++first_index)
+    for(int lowerIndex = 0; lowerIndex < length-1; ++lowerIndex)
     {
-        for(int last_index = first_index+1; last_index < length; ++last_index)
+        for(int upperIndex = lowerIndex+1; upperIndex < length; ++upperIndex)
         {
-            if(str[first_index] == str[last_index])
+            if(str[lowerIndex] == str[upperIndex])
             {
-                MatchIndices indices {first_index, first_index, last_index, last_index};
-                std::cout << indices << std::endl;
-                matches.push(indices);
-                all_indices.insert(indices);
+                MatchIndices match {lowerIndex, lowerIndex, upperIndex, upperIndex};
+                std::cout << match << std::endl;
                 ++num_anagrams;
-            }
-        }
-    }
-    while(!matches.empty())
-    {
-        MatchIndices match = matches.front();
-        matches.pop();
-        if(str[match.firstUpper+1] == str[match.secondUpper+1])
-        {
-            MatchIndices new_match {match.firstLower, match.firstUpper+1, match.secondLower, match.secondUpper+1};
-            if(all_indices.insert(new_match).second)
-            {
-                std::cout << new_match << std::endl;
-                matches.push(new_match);
-                ++num_anagrams;
-            }
-        }
-        if(match.firstLower < (match.secondLower-1) && str[match.firstUpper+1] == str[match.secondLower-1])
-        {
-            MatchIndices new_match {match.firstLower, match.firstUpper+1, match.secondLower-1, match.secondUpper};
-            if(all_indices.insert(new_match).second)
-            {
-                std::cout << new_match << std::endl;
-                matches.push(new_match);
-                ++num_anagrams;
+                if(upperIndex - lowerIndex > 1)
+                {
+                    match.firstUpper = match.secondUpper-1;
+                    match.secondLower = match.firstLower+1;
+                    ++num_anagrams;
+                    std::cout << match << std::endl;
+                    ++match.secondLower;
+                    --match.firstUpper;
+                    while(match.firstUpper > match.firstLower && match.secondLower < match.secondUpper && str[match.firstUpper] == str[match.secondLower])
+                    {
+                        ++num_anagrams;
+                        std::cout << match << std::endl;
+                        ++match.secondLower;
+                        --match.firstUpper;
+                    }
+                }
             }
         }
     }
